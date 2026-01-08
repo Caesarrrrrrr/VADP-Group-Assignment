@@ -11152,7 +11152,6 @@ GameObject:
   - component: {fileID: 1736765553}
   - component: {fileID: 1736765552}
   - component: {fileID: 1736765551}
-  - component: {fileID: 1736765550}
   - component: {fileID: 1736765549}
   m_Layer: 0
   m_Name: Cube
@@ -11175,18 +11174,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 100
   healthBar: {fileID: 1162379926}
---- !u!114 &1736765550
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1736765548}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8b5981d72cf1d544c85f516d1fd2d7f1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!65 &1736765551
 BoxCollider:
   m_ObjectHideFlags: 0
