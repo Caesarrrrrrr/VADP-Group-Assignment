@@ -14,7 +14,7 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Samples/XR Hands/1.7.2/Hand Capture/HandCapture.unity
     guid: 1ebe1fe45ff8e46c9ac6fdd6bfd9ec73
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/MainScene.unity
     guid: 9dad15f4099483747ba158eeb3d2d79a
   m_configObjects:

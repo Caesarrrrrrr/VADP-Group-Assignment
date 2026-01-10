@@ -10,6 +10,7 @@ Library: D:\github\VADP-Group-Assignment\Temp\BurstOutput\tempburstlibs\arm64-v8
 --target-framework=NetFramework
 --generate-link-xml=Temp\burst.link.xml
 --temp-folder=D:\github\VADP-Group-Assignment\Temp\Burst
+--debug=Full
 --key-folder=D:/Unity/Unity Editor/6000.0.59f2/Editor/Data/PlaybackEngines/AndroidPlayer
 --decode-folder=D:\github\VADP-Group-Assignment\Library\Burst
 --output=D:\github\VADP-Group-Assignment\Temp\BurstOutput\tempburstlibs\arm64-v8a\lib_burst_generated
@@ -97,6 +98,7 @@ Library: D:\github\VADP-Group-Assignment\Temp\BurstOutput\tempburstlibs\arm64-v8
 --target-framework=NetFramework
 --generate-link-xml=Temp\burst.link.xml
 --temp-folder=D:\github\VADP-Group-Assignment\Temp\Burst
+--debug=Full
 --key-folder=D:/Unity/Unity Editor/6000.0.59f2/Editor/Data/PlaybackEngines/AndroidPlayer
 --decode-folder=D:\github\VADP-Group-Assignment\Library\Burst
 --output=D:\github\VADP-Group-Assignment\Temp\BurstOutput\tempburstlibs\arm64-v8a\lib_burst_generated
@@ -215,6 +217,7 @@ Library: D:\github\VADP-Group-Assignment\Temp\BurstOutput\tempburstlibs\arm64-v8
 --float-mode=Fast
 --generate-link-xml=Temp\burst.link.xml
 --temp-folder=D:\github\VADP-Group-Assignment\Temp\Burst
+--debug=Full
 --key-folder=D:/Unity/Unity Editor/6000.0.59f2/Editor/Data/PlaybackEngines/AndroidPlayer
 --decode-folder=D:\github\VADP-Group-Assignment\Library\Burst
 --output=D:\github\VADP-Group-Assignment\Temp\BurstOutput\tempburstlibs\arm64-v8a\lib_burst_generated

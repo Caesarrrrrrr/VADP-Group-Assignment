@@ -8,30 +8,37 @@ public class HealthBarUI : MonoBehaviour
 
     [Header("Settings")]
     public bool alwaysFaceCamera = true;
-    private Camera mainCamera;
+    private Camera _mainCamera;
 
     void Start()
     {
-        // Find the camera automatically
-        mainCamera = Camera.main;
+        // Cache the camera. In VR, sometimes Camera.main needs a moment to assign.
+        _mainCamera = Camera.main;
     }
 
-    // Call this function from ANY script to update the bar
+    // Call this function from the NetworkHealth script
     public void UpdateHealthBar(float currentHealth, float maxHealth)
     {
         if (healthSlider != null)
         {
-            // Converts values to a 0.0 to 1.0 scale for the slider
-            healthSlider.value = currentHealth / maxHealth;
+            // Protect against divide by zero
+            float val = (maxHealth > 0) ? currentHealth / maxHealth : 0;
+            healthSlider.value = val;
         }
     }
 
     void LateUpdate()
     {
-        // Makes the canvas always face the camera (Billboarding)
-        if (alwaysFaceCamera && mainCamera != null)
+        // Billboarding: Make the canvas face the local player's camera
+        if (alwaysFaceCamera)
         {
-            transform.rotation = mainCamera.transform.rotation;
+            if (_mainCamera == null) _mainCamera = Camera.main; // Retry finding camera if missing
+
+            if (_mainCamera != null)
+            {
+                // Smoothly rotate to face the camera
+                transform.rotation = _mainCamera.transform.rotation;
+            }
         }
     }
 }

@@ -3,25 +3,39 @@ using Fusion;
 
 public class ShootBall : MonoBehaviour
 {
-    [Header("Physics Controls")]
-    [Tooltip("How strong the ball shoots (Speed)")]
-    public float shootForce = 20f;
+    private NetworkRunner _runner;
 
-    [Tooltip("How long the ball exists before disappearing (Range)")]
-    public float ballLifeTime = 3f;
+    // Notice: No 'shootForce' or 'lifeTime' here. 
+    // Those belong inside the Fireball Prefab (MagicProjectile.cs) now.
 
-    public void ShootingBall(GameObject prefabToSpawn, Vector3 spawnPosition, Quaternion aimDirection)
+    public void ShootingBall(NetworkObject prefabToSpawn, Vector3 spawnPosition, Quaternion aimDirection)
     {
-        // Use the passed 'prefabToSpawn' instead of the default variable
-        GameObject ball = Instantiate(prefabToSpawn, spawnPosition, aimDirection);
-
-        Rigidbody rb = ball.GetComponent<Rigidbody>();
-        if (rb != null)
+        // 1. SAFETY CHECKS (Keep these, they are perfect)
+        if (prefabToSpawn == null)
         {
-            rb.linearVelocity = Vector3.zero; // Unity 6 syntax
-            rb.AddForce(ball.transform.forward * shootForce, ForceMode.Impulse);
+            Debug.LogError("🔴 CRASH PREVENTED: 'projectilePrefab' is NULL!");
+            return;
         }
 
-        Destroy(ball, ballLifeTime);
+        if (_runner == null) _runner = FindFirstObjectByType<NetworkRunner>();
+        if (_runner == null || !_runner.IsRunning)
+        {
+            Debug.LogError("🔴 CRASH PREVENTED: Not connected to Fusion Network!");
+            return;
+        }
+
+        // 2. SPAWN ONLY
+        try 
+        {
+            // We just spawn it. The fireball script (MagicProjectile.cs) wakes up and starts moving itself.
+            _runner.Spawn(prefabToSpawn, spawnPosition, aimDirection, _runner.LocalPlayer);
+            
+            // NO AddForce. 
+            // NO Despawn Coroutine.
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError($"🔴 SPAWN ERROR: {e.Message}");
+        }
     }
 }

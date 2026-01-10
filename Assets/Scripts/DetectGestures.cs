@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.XR.Hands;
 using UnityEngine.XR.Hands.Gestures;
 using UnityEngine.XR.Hands.Samples.GestureSample;
+using Fusion;
 
 public class DetectGestures : MonoBehaviour
 {
@@ -13,7 +14,7 @@ public class DetectGestures : MonoBehaviour
     {
         public string name; // Just for organization in Inspector
         public XRHandShape handShape;
-        public GameObject projectilePrefab; // Drag Sphere or Cube here
+        public NetworkObject projectilePrefab; // Drag Sphere or Cube here
     }
 
     // 2. USE THIS LIST INSTEAD OF JUST 'XRHandShape[]'
@@ -38,6 +39,10 @@ public class DetectGestures : MonoBehaviour
     {
         mainCamera = Camera.main;
         timeOfLastShot = -shootCooldown;
+
+        // Safety Check: Warn if references are missing
+        if (shootBall == null) Debug.LogError("DetectGestures: ShootBall script is missing!");
+        if (handShapeCompletenessCalculator == null) Debug.LogError("DetectGestures: Calculator is missing!");
     }
 
     void OnJointsUpdated(XRHandJointsUpdatedEventArgs eventArgs)
@@ -50,24 +55,29 @@ public class DetectGestures : MonoBehaviour
         // 3. LOOP THROUGH THE MAPPINGS
         foreach (var mapping in gestureMappings)
         {
+            // SAFETY CHECK: Skip if the shape or prefab is missing
+            if (mapping.handShape == null || mapping.projectilePrefab == null) continue;
+
             // Calculate score using the shape from the mapping
-            handShapeCompletenessCalculator.TryCalculateHandShapeCompletenessScore(eventArgs.hand,
-                mapping.handShape, out float completenessScore);
-
-            var detected = handTrackingEvents.handIsTracked && completenessScore >= minimumGestureThreshold;
-
-            if (detected)
+            if (handShapeCompletenessCalculator != null)
             {
-                if (Time.time >= timeOfLastShot + shootCooldown)
+                handShapeCompletenessCalculator.TryCalculateHandShapeCompletenessScore(eventArgs.hand,
+                    mapping.handShape, out float completenessScore);
+
+                var detected = handTrackingEvents.handIsTracked && completenessScore >= minimumGestureThreshold;
+
+                if (detected)
                 {
-                    Debug.Log($"Detected: {mapping.name} | Shooting: {mapping.projectilePrefab.name}");
-
-                    if (eventArgs.hand.GetJoint(XRHandJointID.IndexTip).TryGetPose(out Pose indexPose))
+                    if (Time.time >= timeOfLastShot + shootCooldown)
                     {
-                        // 4. PASS THE SPECIFIC PREFAB TO THE FUNCTION
-                        FireAtLookDirection(mapping.projectilePrefab, indexPose.position);
+                        Debug.Log($"Detected: {mapping.name} | Shooting: {mapping.projectilePrefab.name}");
 
-                        timeOfLastShot = Time.time;
+                        if (eventArgs.hand.GetJoint(XRHandJointID.IndexTip).TryGetPose(out Pose indexPose))
+                        {
+                            // 4. PASS THE SPECIFIC PREFAB TO THE FUNCTION
+                            FireAtLookDirection(mapping.projectilePrefab, indexPose.position);
+                            timeOfLastShot = Time.time;
+                        }
                     }
                 }
             }
@@ -75,13 +85,17 @@ public class DetectGestures : MonoBehaviour
     }
 
     // 5. UPDATE FUNCTION TO ACCEPT THE PREFAB
-    void FireAtLookDirection(GameObject prefabToShoot, Vector3 handPosition)
+    void FireAtLookDirection(NetworkObject prefabToShoot, Vector3 handPosition)
     {
         if (mainCamera == null) return;
+        if (shootBall == null) return;
 
         Quaternion aimRotation = mainCamera.transform.rotation;
+        // Optional: Aim slightly up so it doesn't hit the floor immediately
+        // Quaternion aimRotation = Quaternion.LookRotation(mainCamera.transform.forward + Vector3.up * 0.1f);
+
         Vector3 lookDirection = mainCamera.transform.forward;
-        Vector3 spawnPos = handPosition + (lookDirection * 0.1f);
+        Vector3 spawnPos = handPosition + (lookDirection * 0.2f); // Push out 20cm to avoid hitting own hand
 
         // Pass the specific prefab to the ShootBall script
         shootBall.ShootingBall(prefabToShoot, spawnPos, aimRotation);
