@@ -103,6 +103,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 284847970742790660, guid: d19c960e2f0c14a7ca1ebd345700afdd, type: 3}
       insertIndex: -1
       addedObject: {fileID: 434153114632918812}
+    - targetCorrespondingSourceObject: {fileID: 284847970742790660, guid: d19c960e2f0c14a7ca1ebd345700afdd, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3425958157246239568}
+    - targetCorrespondingSourceObject: {fileID: 284847970742790660, guid: d19c960e2f0c14a7ca1ebd345700afdd, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -5287548540365306130}
   m_SourcePrefab: {fileID: 100100000, guid: d19c960e2f0c14a7ca1ebd345700afdd, type: 3}
 --- !u!1 &2788573331118337571 stripped
 GameObject:
@@ -130,3 +136,29 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &3425958157246239568
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2788573331118337571}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a72429a8b40b1d4295ded2458fef245, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damageAmount: 50
+--- !u!114 &-5287548540365306130
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2788573331118337571}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f8d5c1e915082542a730524d289beac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetUIName: ThunderClap

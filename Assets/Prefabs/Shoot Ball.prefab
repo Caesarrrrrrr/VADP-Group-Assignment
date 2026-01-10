@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 5907668899042333961}
   - component: {fileID: -3529441593291859027}
   - component: {fileID: 3163715999163553990}
+  - component: {fileID: 8604517086683152492}
   m_Layer: 0
   m_Name: Shoot Ball
   m_TagString: Untagged
@@ -149,4 +150,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a72429a8b40b1d4295ded2458fef245, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 20
+  damageAmount: 20
+--- !u!114 &8604517086683152492
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1542916930225078048}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f8d5c1e915082542a730524d289beac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetUIName: Fireball_Cooldown_Box
