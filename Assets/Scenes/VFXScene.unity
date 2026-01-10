@@ -6243,17 +6243,21 @@ MonoBehaviour:
   - name: Fireball
     handShape: {fileID: 11400000, guid: 1ea02999802462b468ed8cdcb93a2bbf, type: 2}
     projectilePrefab: {fileID: 3529620944495799580, guid: 03eae5a4663b77742992f85aa13d0318, type: 3}
+    skillType: 0
   - name: WaterMagic
     handShape: {fileID: 11400000, guid: e780148f5f89e9d47b1f277c667c2a9b, type: 2}
     projectilePrefab: {fileID: 2788573331118337571, guid: d99cd4ebcae5b4740a6da613ed81b08d, type: 3}
+    skillType: 2
   - name: MagicShield
     handShape: {fileID: 11400000, guid: 4fe0b641f0a253d4e8409fcce96f7eb9, type: 2}
     projectilePrefab: {fileID: 9025240628541923014, guid: 5d004132253d26f488acffd1134771bf, type: 3}
-  gestureDetectionInterval: 0.2
-  minimumGestureThreshold: 0.92
+    skillType: 1
+  minimumGestureThreshold: 0.9
   handShapeCompletenessCalculator: {fileID: 1957475714}
-  shootBall: {fileID: 1364222349}
-  shootCooldown: 1.5
+  magicSpawner: {fileID: 1364222351}
+  fireballCooldown: 1.5
+  shieldCooldown: 3
+  circleCooldown: 3
 --- !u!114 &1098975478
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8555,9 +8559,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1364222350}
-  - component: {fileID: 1364222349}
   - component: {fileID: 1364222351}
-  - component: {fileID: 1364222352}
   m_Layer: 0
   m_Name: MagicManager
   m_TagString: Untagged
@@ -8565,21 +8567,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1364222349
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1364222348}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ab7925f0f45735845a40d07a1e978d72, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  shootForce: 10
-  ballLifeTime: 2
-  customGravity: 0
 --- !u!4 &1364222350
 Transform:
   m_ObjectHideFlags: 0
@@ -8604,31 +8591,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 1364222348}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 42d344798180e704f806f5b55056fe2f, type: 3}
+  m_Script: {fileID: 11500000, guid: ab7925f0f45735845a40d07a1e978d72, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  waterMagicPrefab: {fileID: 2788573331118337571, guid: d99cd4ebcae5b4740a6da613ed81b08d, type: 3}
-  maxRayDistance: 10
-  groundLayerMask:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  lifeTime: 5
---- !u!114 &1364222352
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1364222348}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fddceca329ce1914b95a388646c4827d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  shieldPrefab: {fileID: 9025240628541923014, guid: 5d004132253d26f488acffd1134771bf, type: 3}
-  playerHead: {fileID: 0}
-  groundLevel: 0
-  holdToActivate: 1
+  shootForce: 20
+  ballLifeTime: 3
+  maxCastDistance: 10
+  arcHeight: 2
+  arcMaterial: {fileID: 0}
 --- !u!1 &1365899646
 GameObject:
   m_ObjectHideFlags: 0

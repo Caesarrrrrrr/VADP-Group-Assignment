@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.XR.Hands;
 using UnityEngine.XR.Hands.Gestures;
 using UnityEngine.XR.Hands.Samples.GestureSample;
@@ -7,28 +7,45 @@ public class DetectGestures : MonoBehaviour
 {
     [SerializeField] private XRHandTrackingEvents handTrackingEvents;
 
-    // 1. DEFINE A CUSTOM STRUCT TO LINK SHAPE -> PREFAB
+    public enum SkillType
+    {
+        ShootProjectile,
+        SpawnShield,
+        SpawnCircle
+    }
+
     [System.Serializable]
     public struct GestureMapping
     {
-        public string name; // Just for organization in Inspector
+        public string name;
         public XRHandShape handShape;
-        public GameObject projectilePrefab; // Drag Sphere or Cube here
+        public GameObject projectilePrefab;
+        public SkillType skillType;
     }
 
-    // 2. USE THIS LIST INSTEAD OF JUST 'XRHandShape[]'
     [SerializeField] private GestureMapping[] gestureMappings;
-
-    [SerializeField] private float gestureDetectionInterval = 0.1f;
-    [SerializeField] private float minimumGestureThreshold = 0.9f;
+    [SerializeField] private float minimumGestureThreshold = 0.6f;
     [SerializeField] private HandShapeCompletenessCalculator handShapeCompletenessCalculator;
-    [SerializeField] private ShootBall shootBall;
+    [SerializeField] private MagicSpawner magicSpawner;
 
-    [Header("Shooting Settings")]
-    [SerializeField] private float shootCooldown = 2.0f;
+    [Header("Cooldown Settings (Seconds)")]
+    [Tooltip("Cooldown for Fireball")]
+    [SerializeField] private float fireballCooldown = 0.5f;
 
-    private float timeOfLastConditionsCheck;
-    private float timeOfLastShot;
+    [Tooltip("Cooldown for Shield")]
+    [SerializeField] private float shieldCooldown = 5.0f;
+
+    [Tooltip("Cooldown for Magic Circle")]
+    [SerializeField] private float circleCooldown = 3.0f;
+
+    // Track the last execution time for each skill
+    private float lastFireballTime = -100f;
+    private float lastShieldTime = -100f;
+    private float lastCircleTime = -100f;
+
+    // State for Magic Circle Aiming
+    private bool isAimingCircle = false;
+    private int aimingGestureIndex = -1;
     private Camera mainCamera;
 
     void OnEnable() => handTrackingEvents.jointsUpdated.AddListener(OnJointsUpdated);
@@ -37,55 +54,113 @@ public class DetectGestures : MonoBehaviour
     void Start()
     {
         mainCamera = Camera.main;
-        timeOfLastShot = -shootCooldown;
+        // Initialize timers so skills are ready immediately
+        lastFireballTime = -fireballCooldown;
+        lastShieldTime = -shieldCooldown;
+        lastCircleTime = -circleCooldown;
     }
 
     void OnJointsUpdated(XRHandJointsUpdatedEventArgs eventArgs)
     {
-        if (Time.time - timeOfLastConditionsCheck < gestureDetectionInterval)
-            return;
-
-        timeOfLastConditionsCheck = Time.time;
-
-        // 3. LOOP THROUGH THE MAPPINGS
-        foreach (var mapping in gestureMappings)
+        for (int i = 0; i < gestureMappings.Length; i++)
         {
-            // Calculate score using the shape from the mapping
-            handShapeCompletenessCalculator.TryCalculateHandShapeCompletenessScore(eventArgs.hand,
-                mapping.handShape, out float completenessScore);
+            var mapping = gestureMappings[i];
 
-            var detected = handTrackingEvents.handIsTracked && completenessScore >= minimumGestureThreshold;
+            // 1. Calculate Score
+            handShapeCompletenessCalculator.TryCalculateHandShapeCompletenessScore(eventArgs.hand, mapping.handShape, out float completenessScore);
+            bool isDetected = handTrackingEvents.handIsTracked && completenessScore >= minimumGestureThreshold;
 
-            if (detected)
+            // 2. Logic Flow based on Skill Type
+            if (mapping.skillType == SkillType.SpawnCircle)
             {
-                if (Time.time >= timeOfLastShot + shootCooldown)
+                // Special logic for Circle: Hold to Aim, Release to Cast
+                HandleCircleLogic(i, mapping, isDetected);
+            }
+            else
+            {
+                // Instant cast logic for Fireball and Shield
+                if (isDetected)
                 {
-                    Debug.Log($"Detected: {mapping.name} | Shooting: {mapping.projectilePrefab.name}");
-
-                    if (eventArgs.hand.GetJoint(XRHandJointID.IndexTip).TryGetPose(out Pose indexPose))
-                    {
-                        // 4. PASS THE SPECIFIC PREFAB TO THE FUNCTION
-                        FireAtLookDirection(mapping.projectilePrefab, indexPose.position);
-
-                        timeOfLastShot = Time.time;
-                    }
+                    ExecuteInstantSkill(mapping, eventArgs.hand);
                 }
             }
         }
     }
 
-    // 5. UPDATE FUNCTION TO ACCEPT THE PREFAB
-    void FireAtLookDirection(GameObject prefabToShoot, Vector3 handPosition)
+    // Logic: Aim while holding, Cast when released
+    void HandleCircleLogic(int index, GestureMapping mapping, bool isDetected)
     {
-        if (mainCamera == null) return;
+        if (isDetected)
+        {
+            // === HOLDING GESTURE: AIMING ===
+            isAimingCircle = true;
+            aimingGestureIndex = index;
 
-        Quaternion aimRotation = mainCamera.transform.rotation;
-        Vector3 lookDirection = mainCamera.transform.forward;
-        Vector3 spawnPos = handPosition + (lookDirection * 0.1f);
+            // Show preview line
+            if (magicSpawner != null)
+                magicSpawner.UpdateAimingPreview(mainCamera.transform);
+        }
+        else
+        {
+            // === GESTURE RELEASED: CASTING ===
+            if (isAimingCircle && aimingGestureIndex == index)
+            {
+                // Check Cooldown
+                if (Time.time >= lastCircleTime + circleCooldown)
+                {
+                    Debug.Log("Magic Circle Cast!");
+                    if (magicSpawner != null)
+                        magicSpawner.SpawnGroundCircle(mapping.projectilePrefab, mainCamera.transform);
 
-        // Pass the specific prefab to the ShootBall script
-        shootBall.ShootingBall(prefabToShoot, spawnPos, aimRotation);
+                    lastCircleTime = Time.time;
+                }
+                else
+                {
+                    float remaining = (lastCircleTime + circleCooldown) - Time.time;
+                    Debug.Log($"Circle Cooldown: {remaining:F1}s remaining");
+
+                    // Hide the preview line even if cast failed due to cooldown
+                    if (magicSpawner != null) magicSpawner.HidePreview();
+                }
+
+                // Reset State
+                isAimingCircle = false;
+                aimingGestureIndex = -1;
+            }
+        }
     }
 
-    void Update() { }
+    // Logic: Instant Cast
+    void ExecuteInstantSkill(GestureMapping mapping, XRHand hand)
+    {
+        if (mainCamera == null || magicSpawner == null) return;
+
+        switch (mapping.skillType)
+        {
+            case SkillType.ShootProjectile:
+                // Check Fireball Cooldown
+                if (Time.time >= lastFireballTime + fireballCooldown)
+                {
+                    if (hand.GetJoint(XRHandJointID.IndexTip).TryGetPose(out Pose indexPose))
+                    {
+                        Vector3 spawnPos = indexPose.position + (mainCamera.transform.forward * 0.2f);
+                        magicSpawner.ShootingBall(mapping.projectilePrefab, spawnPos, mainCamera.transform.rotation);
+
+                        lastFireballTime = Time.time;
+                    }
+                }
+                break;
+
+            case SkillType.SpawnShield:
+                // Check Shield Cooldown
+                if (Time.time >= lastShieldTime + shieldCooldown)
+                {
+                    magicSpawner.SpawnShield(mapping.projectilePrefab, mainCamera.transform);
+
+                    lastShieldTime = Time.time;
+                    Debug.Log("Shield Spawned. Cooldown started.");
+                }
+                break;
+        }
+    }
 }
