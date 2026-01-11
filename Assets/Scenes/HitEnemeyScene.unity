@@ -759,37 +759,6 @@ MonoBehaviour:
   m_LightCookieSize: {x: 1, y: 1}
   m_LightCookieOffset: {x: 0, y: 0}
   m_SoftShadowQuality: 1
---- !u!1 &443114022
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 443114023}
-  m_Layer: 0
-  m_Name: Gemini_Generated_Image_xgi44bxgi44bxgi4 (1)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!4 &443114023
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 443114022}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &459654178
 GameObject:
   m_ObjectHideFlags: 0
@@ -1212,37 +1181,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 795595604}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &964709668
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 964709669}
-  m_Layer: 0
-  m_Name: fireball
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!4 &964709669
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 964709668}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1098975475
 GameObject:
   m_ObjectHideFlags: 0
@@ -1293,17 +1231,34 @@ MonoBehaviour:
   - name: Fireball
     handShape: {fileID: 11400000, guid: 1ea02999802462b468ed8cdcb93a2bbf, type: 2}
     projectilePrefab: {fileID: 3529620944495799580, guid: 03eae5a4663b77742992f85aa13d0318, type: 3}
+    skillType: 0
+    requiresVoice: 0
+    voiceKeyword: 
+    skillSound: {fileID: 0}
+    soundVolume: 0
   - name: Muliokusho
     handShape: {fileID: 11400000, guid: e780148f5f89e9d47b1f277c667c2a9b, type: 2}
     projectilePrefab: {fileID: 2788573331118337571, guid: d99cd4ebcae5b4740a6da613ed81b08d, type: 3}
+    skillType: 0
+    requiresVoice: 0
+    voiceKeyword: 
+    skillSound: {fileID: 0}
+    soundVolume: 0
   - name: Spidermann
     handShape: {fileID: 11400000, guid: 4fe0b641f0a253d4e8409fcce96f7eb9, type: 2}
     projectilePrefab: {fileID: 1289543790355709915, guid: b99922c2f59b1a542bdd06ae8bee47ae, type: 3}
-  gestureDetectionInterval: 0.2
+    skillType: 0
+    requiresVoice: 0
+    voiceKeyword: 
+    skillSound: {fileID: 0}
+    soundVolume: 0
   minimumGestureThreshold: 0.92
   handShapeCompletenessCalculator: {fileID: 1957475714}
-  shootBall: {fileID: 1364222349}
-  shootCooldown: 1.5
+  magicSpawner: {fileID: 0}
+  voiceService: {fileID: 0}
+  fireballCooldown: 0.5
+  shieldCooldown: 5
+  circleCooldown: 3
 --- !u!114 &1098975478
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1921,6 +1876,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   shootForce: 20
   ballLifeTime: 3
+  maxCastDistance: 10
+  arcHeight: 2
+  arcMaterial: {fileID: 0}
 --- !u!4 &1364222350
 Transform:
   m_ObjectHideFlags: 0
@@ -2238,37 +2196,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!1 &1458859678
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1458859679}
-  m_Layer: 0
-  m_Name: Gemini_Generated_Image_xgi44bxgi44bxgi4
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!4 &1458859679
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1458859678}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1472171721
 GameObject:
   m_ObjectHideFlags: 0
@@ -3215,6 +3142,3 @@ SceneRoots:
   - {fileID: 1479494735}
   - {fileID: 795595604}
   - {fileID: 1540951620}
-  - {fileID: 1458859679}
-  - {fileID: 443114023}
-  - {fileID: 964709669}
