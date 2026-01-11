@@ -1,91 +1,229 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.XR.Hands;
 using UnityEngine.XR.Hands.Gestures;
 using UnityEngine.XR.Hands.Samples.GestureSample;
+using Meta.WitAi;
 
 public class DetectGestures : MonoBehaviour
 {
     [SerializeField] private XRHandTrackingEvents handTrackingEvents;
 
-    // 1. DEFINE A CUSTOM STRUCT TO LINK SHAPE -> PREFAB
+    public enum SkillType
+    {
+        ShootProjectile,
+        SpawnShield,
+        SpawnCircle
+    }
+
     [System.Serializable]
     public struct GestureMapping
     {
-        public string name; // Just for organization in Inspector
+        [Header("Basic Settings")]
+        public string name;
         public XRHandShape handShape;
-        public GameObject projectilePrefab; // Drag Sphere or Cube here
+        public GameObject projectilePrefab;
+        public SkillType skillType;
+
+        [Header("Voice Settings")]
+        public bool requiresVoice;
+        [Tooltip("Must match the 'Resolved Value' from Wit.ai exactly (e.g., fireball)")]
+        public string voiceKeyword;
+
+        [Header("Sound Settings")]
+        [Tooltip("Sound effect to play when skill is cast")]
+        public AudioClip skillSound;
+
+        [Range(0, 100)]
+        [Tooltip("Volume level (0-100)")]
+        public float soundVolume; // No default value to avoid struct error
     }
 
-    // 2. USE THIS LIST INSTEAD OF JUST 'XRHandShape[]'
     [SerializeField] private GestureMapping[] gestureMappings;
-
-    [SerializeField] private float gestureDetectionInterval = 0.1f;
-    [SerializeField] private float minimumGestureThreshold = 0.9f;
+    [SerializeField] private float minimumGestureThreshold = 0.6f;
     [SerializeField] private HandShapeCompletenessCalculator handShapeCompletenessCalculator;
-    [SerializeField] private ShootBall shootBall;
+    [SerializeField] private MagicSpawner magicSpawner;
 
-    [Header("Shooting Settings")]
-    [SerializeField] private float shootCooldown = 2.0f;
+    [Header("Voice Service")]
+    [SerializeField] private VoiceService voiceService;
 
-    private float timeOfLastConditionsCheck;
-    private float timeOfLastShot;
+    [Header("Cooldown Settings")]
+    [SerializeField] private float fireballCooldown = 0.5f;
+    [SerializeField] private float shieldCooldown = 5.0f;
+    [SerializeField] private float circleCooldown = 3.0f;
+
+    private float lastFireballTime = -100f;
+    private float lastShieldTime = -100f;
+    private float lastCircleTime = -100f;
+
+    private bool isAimingCircle = false;
+    private int aimingGestureIndex = -1;
     private Camera mainCamera;
+    private XRHand lastTrackedHand;
+    private bool isHandTracked = false;
 
-    void OnEnable() => handTrackingEvents.jointsUpdated.AddListener(OnJointsUpdated);
-    void OnDisable() => handTrackingEvents.jointsUpdated.RemoveListener(OnJointsUpdated);
+    // To detect the rising edge (moment gesture starts)
+    private bool[] wasGestureActivePreviously;
+    // To track grace period
+    private float[] lastGestureActiveTime;
+    private float gestureGracePeriod = 2.0f;
 
     void Start()
     {
         mainCamera = Camera.main;
-        timeOfLastShot = -shootCooldown;
+        wasGestureActivePreviously = new bool[gestureMappings.Length];
+        lastGestureActiveTime = new float[gestureMappings.Length];
+
+        // Initialize with a past time
+        for (int i = 0; i < lastGestureActiveTime.Length; i++) lastGestureActiveTime[i] = -100f;
     }
+
+    void OnEnable() => handTrackingEvents.jointsUpdated.AddListener(OnJointsUpdated);
+    void OnDisable() => handTrackingEvents.jointsUpdated.RemoveListener(OnJointsUpdated);
 
     void OnJointsUpdated(XRHandJointsUpdatedEventArgs eventArgs)
     {
-        if (Time.time - timeOfLastConditionsCheck < gestureDetectionInterval)
-            return;
+        lastTrackedHand = eventArgs.hand;
+        isHandTracked = handTrackingEvents.handIsTracked;
 
-        timeOfLastConditionsCheck = Time.time;
-
-        // 3. LOOP THROUGH THE MAPPINGS
-        foreach (var mapping in gestureMappings)
+        for (int i = 0; i < gestureMappings.Length; i++)
         {
-            // Calculate score using the shape from the mapping
-            handShapeCompletenessCalculator.TryCalculateHandShapeCompletenessScore(eventArgs.hand,
-                mapping.handShape, out float completenessScore);
+            var mapping = gestureMappings[i];
 
-            var detected = handTrackingEvents.handIsTracked && completenessScore >= minimumGestureThreshold;
+            handShapeCompletenessCalculator.TryCalculateHandShapeCompletenessScore(eventArgs.hand, mapping.handShape, out float completenessScore);
+            bool isDetected = handTrackingEvents.handIsTracked && completenessScore >= minimumGestureThreshold;
 
-            if (detected)
+            if (isDetected) lastGestureActiveTime[i] = Time.time;
+
+            // Auto-activate Microphone logic (Rising Edge)
+            if (mapping.requiresVoice && isDetected && !wasGestureActivePreviously[i])
             {
-                if (Time.time >= timeOfLastShot + shootCooldown)
+                if (voiceService != null && !voiceService.Active)
                 {
-                    Debug.Log($"Detected: {mapping.name} | Shooting: {mapping.projectilePrefab.name}");
+                    Debug.Log($"[DetectGestures] Gesture {mapping.name} detected -> Activating Microphone");
+                    voiceService.Activate();
+                }
+            }
 
-                    if (eventArgs.hand.GetJoint(XRHandJointID.IndexTip).TryGetPose(out Pose indexPose))
-                    {
-                        // 4. PASS THE SPECIFIC PREFAB TO THE FUNCTION
-                        FireAtLookDirection(mapping.projectilePrefab, indexPose.position);
+            wasGestureActivePreviously[i] = isDetected;
 
-                        timeOfLastShot = Time.time;
-                    }
+            // Instant skills (No Voice)
+            if (!mapping.requiresVoice && mapping.skillType != SkillType.SpawnCircle && isDetected)
+            {
+                ExecuteInstantSkill(mapping, eventArgs.hand);
+            }
+            // Circle skills
+            else if (mapping.skillType == SkillType.SpawnCircle)
+            {
+                HandleCircleLogic(i, mapping, isDetected);
+            }
+        }
+    }
+
+    // Called by VoiceBridge
+    public void OnVoiceCommandReceived(string spokenWord)
+    {
+        if (string.IsNullOrEmpty(spokenWord)) return;
+        spokenWord = spokenWord.ToLower().Trim();
+
+        for (int i = 0; i < gestureMappings.Length; i++)
+        {
+            var mapping = gestureMappings[i];
+
+            if (mapping.requiresVoice && mapping.voiceKeyword.ToLower() == spokenWord)
+            {
+                // Check Grace Period
+                if (Time.time - lastGestureActiveTime[i] < gestureGracePeriod)
+                {
+                    Debug.Log($"[Success] Casting {mapping.name}!");
+                    ExecuteInstantSkill(mapping, lastTrackedHand);
+                }
+                else
+                {
+                    Debug.Log($"[Failed] Keyword matched, but gesture timed out.");
                 }
             }
         }
     }
 
-    // 5. UPDATE FUNCTION TO ACCEPT THE PREFAB
-    void FireAtLookDirection(GameObject prefabToShoot, Vector3 handPosition)
+    void ExecuteInstantSkill(GestureMapping mapping, XRHand hand)
     {
-        if (mainCamera == null) return;
+        if (mainCamera == null || magicSpawner == null) return;
 
-        Quaternion aimRotation = mainCamera.transform.rotation;
-        Vector3 lookDirection = mainCamera.transform.forward;
-        Vector3 spawnPos = handPosition + (lookDirection * 0.1f);
+        bool skillTriggered = false;
+        Vector3 soundPosition = mainCamera.transform.position; // Default position
 
-        // Pass the specific prefab to the ShootBall script
-        shootBall.ShootingBall(prefabToShoot, spawnPos, aimRotation);
+        // Try to get hand position for 3D sound
+        if (hand.GetJoint(XRHandJointID.IndexTip).TryGetPose(out Pose p))
+        {
+            soundPosition = p.position;
+        }
+
+        switch (mapping.skillType)
+        {
+            case SkillType.ShootProjectile:
+                if (Time.time >= lastFireballTime + fireballCooldown)
+                {
+                    Vector3 spawnPos = mainCamera.transform.position + mainCamera.transform.forward * 0.5f;
+                    if (hand.GetJoint(XRHandJointID.IndexTip).TryGetPose(out Pose indexPose))
+                    {
+                        spawnPos = indexPose.position;
+                    }
+
+                    magicSpawner.ShootingBall(mapping.projectilePrefab, spawnPos, mainCamera.transform.rotation);
+                    lastFireballTime = Time.time;
+                    skillTriggered = true;
+                }
+                break;
+
+            case SkillType.SpawnShield:
+                if (Time.time >= lastShieldTime + shieldCooldown)
+                {
+                    magicSpawner.SpawnShield(mapping.projectilePrefab, mainCamera.transform);
+                    lastShieldTime = Time.time;
+                    skillTriggered = true;
+                }
+                break;
+        }
+
+        // Play Sound Effect
+        if (skillTriggered && mapping.skillSound != null)
+        {
+            // Convert 0-100 input to 0.0-1.0 float
+            AudioSource.PlayClipAtPoint(mapping.skillSound, soundPosition, mapping.soundVolume / 100f);
+        }
     }
 
-    void Update() { }
+    void HandleCircleLogic(int index, GestureMapping mapping, bool isDetected)
+    {
+        if (isDetected)
+        {
+            isAimingCircle = true;
+            aimingGestureIndex = index;
+            if (magicSpawner != null) magicSpawner.UpdateAimingPreview(mainCamera.transform);
+        }
+        else
+        {
+            if (isAimingCircle && aimingGestureIndex == index)
+            {
+                if (Time.time >= lastCircleTime + circleCooldown)
+                {
+                    if (magicSpawner != null) magicSpawner.SpawnGroundCircle(mapping.projectilePrefab, mainCamera.transform);
+
+                    // Play Sound for Circle (at player's feet/camera position)
+                    if (mapping.skillSound != null)
+                    {
+                        AudioSource.PlayClipAtPoint(mapping.skillSound, mainCamera.transform.position, mapping.soundVolume / 100f);
+                    }
+
+                    lastCircleTime = Time.time;
+                }
+                else
+                {
+                    if (magicSpawner != null) magicSpawner.HidePreview();
+                }
+                isAimingCircle = false;
+                aimingGestureIndex = -1;
+            }
+        }
+    }
 }

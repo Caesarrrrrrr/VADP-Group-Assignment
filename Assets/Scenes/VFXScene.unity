@@ -6243,17 +6243,34 @@ MonoBehaviour:
   - name: Fireball
     handShape: {fileID: 11400000, guid: 1ea02999802462b468ed8cdcb93a2bbf, type: 2}
     projectilePrefab: {fileID: 3529620944495799580, guid: 03eae5a4663b77742992f85aa13d0318, type: 3}
+    skillType: 0
+    requiresVoice: 1
+    voiceKeyword: fireball
+    skillSound: {fileID: 8300000, guid: cac29c4818ffabb4481c37c8cdb62b62, type: 3}
+    soundVolume: 70
   - name: WaterMagic
     handShape: {fileID: 11400000, guid: e780148f5f89e9d47b1f277c667c2a9b, type: 2}
     projectilePrefab: {fileID: 2788573331118337571, guid: d99cd4ebcae5b4740a6da613ed81b08d, type: 3}
+    skillType: 2
+    requiresVoice: 0
+    voiceKeyword: 
+    skillSound: {fileID: 0}
+    soundVolume: 0
   - name: MagicShield
     handShape: {fileID: 11400000, guid: 4fe0b641f0a253d4e8409fcce96f7eb9, type: 2}
     projectilePrefab: {fileID: 9025240628541923014, guid: 5d004132253d26f488acffd1134771bf, type: 3}
-  gestureDetectionInterval: 0.2
-  minimumGestureThreshold: 0.92
+    skillType: 1
+    requiresVoice: 0
+    voiceKeyword: 
+    skillSound: {fileID: 8300000, guid: d476249c37e3bae4aaee670da8c171de, type: 3}
+    soundVolume: 70
+  minimumGestureThreshold: 0.8
   handShapeCompletenessCalculator: {fileID: 1957475714}
-  shootBall: {fileID: 1364222349}
-  shootCooldown: 1.5
+  magicSpawner: {fileID: 1364222351}
+  voiceService: {fileID: 2042360813}
+  fireballCooldown: 1.5
+  shieldCooldown: 3
+  circleCooldown: 3
 --- !u!114 &1098975478
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8555,9 +8572,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1364222350}
-  - component: {fileID: 1364222349}
   - component: {fileID: 1364222351}
-  - component: {fileID: 1364222352}
   m_Layer: 0
   m_Name: MagicManager
   m_TagString: Untagged
@@ -8565,21 +8580,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1364222349
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1364222348}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ab7925f0f45735845a40d07a1e978d72, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  shootForce: 10
-  ballLifeTime: 2
-  customGravity: 0
 --- !u!4 &1364222350
 Transform:
   m_ObjectHideFlags: 0
@@ -8604,31 +8604,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 1364222348}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 42d344798180e704f806f5b55056fe2f, type: 3}
+  m_Script: {fileID: 11500000, guid: ab7925f0f45735845a40d07a1e978d72, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  waterMagicPrefab: {fileID: 2788573331118337571, guid: d99cd4ebcae5b4740a6da613ed81b08d, type: 3}
-  maxRayDistance: 10
-  groundLayerMask:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  lifeTime: 5
---- !u!114 &1364222352
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1364222348}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fddceca329ce1914b95a388646c4827d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  shieldPrefab: {fileID: 9025240628541923014, guid: 5d004132253d26f488acffd1134771bf, type: 3}
-  playerHead: {fileID: 0}
-  groundLevel: 0
-  holdToActivate: 1
+  shootForce: 20
+  ballLifeTime: 3
+  maxCastDistance: 10
+  arcHeight: 2
+  arcMaterial: {fileID: 0}
 --- !u!1 &1365899646
 GameObject:
   m_ObjectHideFlags: 0
@@ -12046,6 +12029,51 @@ Transform:
   - {fileID: 1098975476}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1964602097
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1964602099}
+  - component: {fileID: 1964602098}
+  m_Layer: 0
+  m_Name: VoiceBridge
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1964602098
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1964602097}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb6c5c3062e671f4c9bb20f07206d74a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  detectGestures: {fileID: 1098975477}
+--- !u!4 &1964602099
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1964602097}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.9264005, y: 0.007946298, z: 1.0852766}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1973367463
 GameObject:
   m_ObjectHideFlags: 0
@@ -12413,6 +12441,188 @@ SkinnedMeshRenderer:
     m_Center: {x: 0.008976316, y: -0.064772196, z: -0.067473285}
     m_Extent: {x: 0.0043462086, y: 0.006806761, z: 0.0068782493}
   m_DirtyAABB: 0
+--- !u!1 &2042360812
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2042360814}
+  - component: {fileID: 2042360813}
+  m_Layer: 0
+  m_Name: VoiceManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2042360813
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2042360812}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 28779cfed47441a42a6cd4fb49c8dc89, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShouldWrap: 1
+  ShouldLog: 1
+  events:
+    _onRequestOptionSetup:
+      m_PersistentCalls:
+        m_Calls: []
+    _onRequestInitialized:
+      m_PersistentCalls:
+        m_Calls: []
+    _onRequestCreated:
+      m_PersistentCalls:
+        m_Calls: []
+    _onSend:
+      m_PersistentCalls:
+        m_Calls: []
+    _onMinimumWakeThresholdHit:
+      m_PersistentCalls:
+        m_Calls: []
+    _onMicDataSent:
+      m_PersistentCalls:
+        m_Calls: []
+    _onStoppedListeningDueToDeactivation:
+      m_PersistentCalls:
+        m_Calls: []
+    _onStoppedListeningDueToInactivity:
+      m_PersistentCalls:
+        m_Calls: []
+    _onStoppedListeningDueToTimeout:
+      m_PersistentCalls:
+        m_Calls: []
+    _onAborting:
+      m_PersistentCalls:
+        m_Calls: []
+    _onAborted:
+      m_PersistentCalls:
+        m_Calls: []
+    _onCanceled:
+      m_PersistentCalls:
+        m_Calls: []
+    _onRawResponse:
+      m_PersistentCalls:
+        m_Calls: []
+    _onPartialResponse:
+      m_PersistentCalls:
+        m_Calls: []
+    _onResponse:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1964602098}
+          m_TargetAssemblyTypeName: VoiceBridge, Assembly-CSharp
+          m_MethodName: HandleWitResponse
+          m_Mode: 0
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    _onError:
+      m_PersistentCalls:
+        m_Calls: []
+    _onRequestCompleted:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1098975477}
+          m_TargetAssemblyTypeName: DetectGestures, Assembly-CSharp
+          m_MethodName: OnVoiceCommandReceived
+          m_Mode: 5
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    _onComplete:
+      m_PersistentCalls:
+        m_Calls: []
+    _onStartListening:
+      m_PersistentCalls:
+        m_Calls: []
+    _onStoppedListening:
+      m_PersistentCalls:
+        m_Calls: []
+    _onMicLevelChanged:
+      m_PersistentCalls:
+        m_Calls: []
+    _onPartialTranscription:
+      m_PersistentCalls:
+        m_Calls: []
+    _onFullTranscription:
+      m_PersistentCalls:
+        m_Calls: []
+    _onUserPartialTranscription:
+      m_PersistentCalls:
+        m_Calls: []
+    _onUserFullTranscription:
+      m_PersistentCalls:
+        m_Calls: []
+    _onByteDataReady:
+      m_PersistentCalls:
+        m_Calls: []
+    _onByteDataSent:
+      m_PersistentCalls:
+        m_Calls: []
+    _onValidatePartialResponse:
+      m_PersistentCalls:
+        m_Calls: []
+  witRuntimeConfiguration:
+    witConfiguration: {fileID: 11400000, guid: a46ef1fd5f0381c459b72d60e39e9412, type: 2}
+    minKeepAliveVolume: 0.0005
+    minKeepAliveTimeInSeconds: 2
+    minTranscriptionKeepAliveTimeInSeconds: 1
+    maxRecordingTime: 20
+    overrideTimeoutMs: 0
+    soundWakeThreshold: 0.0005
+    sampleLengthInMs: 10
+    micBufferLengthInSeconds: 1
+    maxConcurrentRequests: 5
+    sendAudioToWit: 1
+    customTranscriptionProvider: {fileID: 0}
+    alwaysRecord: 0
+    preferredActivationOffset: -0.5
+    transcribeOnly: 0
+    pubSubSettings:
+      PubSubTopicId: 
+      PublishOptions:
+        transcriptionResponses: 1
+        composerResponses: 1
+      SubscribeOptions:
+        transcriptionResponses: 1
+        composerResponses: 1
+  usePlatformServices: 0
+  enableConsoleLogging: 0
+  sendTranscriptionEventsForMessages: 0
+--- !u!4 &2042360814
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2042360812}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.6687855, y: -0.44494486, z: -0.46146578}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2053687329
 GameObject:
   m_ObjectHideFlags: 0
@@ -12934,3 +13144,5 @@ SceneRoots:
   - {fileID: 1364222350}
   - {fileID: 1719140001}
   - {fileID: 1111653501}
+  - {fileID: 2042360814}
+  - {fileID: 1964602099}
