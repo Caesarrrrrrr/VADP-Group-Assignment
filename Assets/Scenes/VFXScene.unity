@@ -6246,18 +6246,24 @@ MonoBehaviour:
     skillType: 0
     requiresVoice: 1
     voiceKeyword: fireball
+    skillSound: {fileID: 8300000, guid: cac29c4818ffabb4481c37c8cdb62b62, type: 3}
+    soundVolume: 70
   - name: WaterMagic
     handShape: {fileID: 11400000, guid: e780148f5f89e9d47b1f277c667c2a9b, type: 2}
     projectilePrefab: {fileID: 2788573331118337571, guid: d99cd4ebcae5b4740a6da613ed81b08d, type: 3}
     skillType: 2
     requiresVoice: 0
     voiceKeyword: 
+    skillSound: {fileID: 0}
+    soundVolume: 0
   - name: MagicShield
     handShape: {fileID: 11400000, guid: 4fe0b641f0a253d4e8409fcce96f7eb9, type: 2}
     projectilePrefab: {fileID: 9025240628541923014, guid: 5d004132253d26f488acffd1134771bf, type: 3}
     skillType: 1
     requiresVoice: 0
     voiceKeyword: 
+    skillSound: {fileID: 8300000, guid: d476249c37e3bae4aaee670da8c171de, type: 3}
+    soundVolume: 70
   minimumGestureThreshold: 0.8
   handShapeCompletenessCalculator: {fileID: 1957475714}
   magicSpawner: {fileID: 1364222351}

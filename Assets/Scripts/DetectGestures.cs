@@ -2,7 +2,7 @@
 using UnityEngine.XR.Hands;
 using UnityEngine.XR.Hands.Gestures;
 using UnityEngine.XR.Hands.Samples.GestureSample;
-using Meta.WitAi; // 引用 Voice SDK
+using Meta.WitAi;
 
 public class DetectGestures : MonoBehaviour
 {
@@ -18,13 +18,24 @@ public class DetectGestures : MonoBehaviour
     [System.Serializable]
     public struct GestureMapping
     {
+        [Header("Basic Settings")]
         public string name;
         public XRHandShape handShape;
         public GameObject projectilePrefab;
         public SkillType skillType;
+
+        [Header("Voice Settings")]
         public bool requiresVoice;
-        [Tooltip("必须和 Wit.ai 识别到的词完全一致 (比如 fireball)")]
+        [Tooltip("Must match the 'Resolved Value' from Wit.ai exactly (e.g., fireball)")]
         public string voiceKeyword;
+
+        [Header("Sound Settings")]
+        [Tooltip("Sound effect to play when skill is cast")]
+        public AudioClip skillSound;
+
+        [Range(0, 100)]
+        [Tooltip("Volume level (0-100)")]
+        public float soundVolume; // No default value to avoid struct error
     }
 
     [SerializeField] private GestureMapping[] gestureMappings;
@@ -32,7 +43,6 @@ public class DetectGestures : MonoBehaviour
     [SerializeField] private HandShapeCompletenessCalculator handShapeCompletenessCalculator;
     [SerializeField] private MagicSpawner magicSpawner;
 
-    // ✅ 用来开启麦克风
     [Header("Voice Service")]
     [SerializeField] private VoiceService voiceService;
 
@@ -51,11 +61,11 @@ public class DetectGestures : MonoBehaviour
     private XRHand lastTrackedHand;
     private bool isHandTracked = false;
 
-    // 记录上一帧状态，用于检测“刚刚做出手势”的瞬间
+    // To detect the rising edge (moment gesture starts)
     private bool[] wasGestureActivePreviously;
-    // 记录手势最后活跃时间 (宽限期用)
+    // To track grace period
     private float[] lastGestureActiveTime;
-    private float gestureGracePeriod = 2.0f; // 宽限期 2秒 (给 Wit.ai 反应时间)
+    private float gestureGracePeriod = 2.0f;
 
     void Start()
     {
@@ -63,7 +73,7 @@ public class DetectGestures : MonoBehaviour
         wasGestureActivePreviously = new bool[gestureMappings.Length];
         lastGestureActiveTime = new float[gestureMappings.Length];
 
-        // 初始化时间
+        // Initialize with a past time
         for (int i = 0; i < lastGestureActiveTime.Length; i++) lastGestureActiveTime[i] = -100f;
     }
 
@@ -82,29 +92,26 @@ public class DetectGestures : MonoBehaviour
             handShapeCompletenessCalculator.TryCalculateHandShapeCompletenessScore(eventArgs.hand, mapping.handShape, out float completenessScore);
             bool isDetected = handTrackingEvents.handIsTracked && completenessScore >= minimumGestureThreshold;
 
-            if (isDetected)
-            {
-                lastGestureActiveTime[i] = Time.time; // 更新活跃时间
-            }
+            if (isDetected) lastGestureActiveTime[i] = Time.time;
 
-            // === 自动激活麦克风逻辑 ===
-            // 只有当：需要语音 + 刚刚没做手势 + 现在做了手势
+            // Auto-activate Microphone logic (Rising Edge)
             if (mapping.requiresVoice && isDetected && !wasGestureActivePreviously[i])
             {
                 if (voiceService != null && !voiceService.Active)
                 {
-                    Debug.Log($"[DetectGestures] 检测到 {mapping.name} 手势 -> 开启麦克风!");
-                    voiceService.Activate(); // 🎤 激活 Wit.ai
+                    Debug.Log($"[DetectGestures] Gesture {mapping.name} detected -> Activating Microphone");
+                    voiceService.Activate();
                 }
             }
 
             wasGestureActivePreviously[i] = isDetected;
 
-            // 不需要语音的技能直接触发
+            // Instant skills (No Voice)
             if (!mapping.requiresVoice && mapping.skillType != SkillType.SpawnCircle && isDetected)
             {
                 ExecuteInstantSkill(mapping, eventArgs.hand);
             }
+            // Circle skills
             else if (mapping.skillType == SkillType.SpawnCircle)
             {
                 HandleCircleLogic(i, mapping, isDetected);
@@ -112,13 +119,11 @@ public class DetectGestures : MonoBehaviour
         }
     }
 
-    // === 📡 这个函数由 VoiceBridge 调用 ===
+    // Called by VoiceBridge
     public void OnVoiceCommandReceived(string spokenWord)
     {
         if (string.IsNullOrEmpty(spokenWord)) return;
-
         spokenWord = spokenWord.ToLower().Trim();
-        Debug.Log($"[DetectGestures] 收到指令: {spokenWord}");
 
         for (int i = 0; i < gestureMappings.Length; i++)
         {
@@ -126,21 +131,68 @@ public class DetectGestures : MonoBehaviour
 
             if (mapping.requiresVoice && mapping.voiceKeyword.ToLower() == spokenWord)
             {
-                // 检查：手势是否在宽限期内？(即使手松开了，只要是2秒内做的都算数)
+                // Check Grace Period
                 if (Time.time - lastGestureActiveTime[i] < gestureGracePeriod)
                 {
-                    Debug.Log($"[✨施法成功] 匹配关键词: {spokenWord}");
+                    Debug.Log($"[Success] Casting {mapping.name}!");
                     ExecuteInstantSkill(mapping, lastTrackedHand);
                 }
                 else
                 {
-                    Debug.Log($"[施法失败] 词对上了，但手势断开太久了。");
+                    Debug.Log($"[Failed] Keyword matched, but gesture timed out.");
                 }
             }
         }
     }
 
-    // ... (剩下的 HandleCircleLogic 和 ExecuteInstantSkill 保持不变，可以直接用之前的)
+    void ExecuteInstantSkill(GestureMapping mapping, XRHand hand)
+    {
+        if (mainCamera == null || magicSpawner == null) return;
+
+        bool skillTriggered = false;
+        Vector3 soundPosition = mainCamera.transform.position; // Default position
+
+        // Try to get hand position for 3D sound
+        if (hand.GetJoint(XRHandJointID.IndexTip).TryGetPose(out Pose p))
+        {
+            soundPosition = p.position;
+        }
+
+        switch (mapping.skillType)
+        {
+            case SkillType.ShootProjectile:
+                if (Time.time >= lastFireballTime + fireballCooldown)
+                {
+                    Vector3 spawnPos = mainCamera.transform.position + mainCamera.transform.forward * 0.5f;
+                    if (hand.GetJoint(XRHandJointID.IndexTip).TryGetPose(out Pose indexPose))
+                    {
+                        spawnPos = indexPose.position;
+                    }
+
+                    magicSpawner.ShootingBall(mapping.projectilePrefab, spawnPos, mainCamera.transform.rotation);
+                    lastFireballTime = Time.time;
+                    skillTriggered = true;
+                }
+                break;
+
+            case SkillType.SpawnShield:
+                if (Time.time >= lastShieldTime + shieldCooldown)
+                {
+                    magicSpawner.SpawnShield(mapping.projectilePrefab, mainCamera.transform);
+                    lastShieldTime = Time.time;
+                    skillTriggered = true;
+                }
+                break;
+        }
+
+        // Play Sound Effect
+        if (skillTriggered && mapping.skillSound != null)
+        {
+            // Convert 0-100 input to 0.0-1.0 float
+            AudioSource.PlayClipAtPoint(mapping.skillSound, soundPosition, mapping.soundVolume / 100f);
+        }
+    }
+
     void HandleCircleLogic(int index, GestureMapping mapping, bool isDetected)
     {
         if (isDetected)
@@ -156,6 +208,13 @@ public class DetectGestures : MonoBehaviour
                 if (Time.time >= lastCircleTime + circleCooldown)
                 {
                     if (magicSpawner != null) magicSpawner.SpawnGroundCircle(mapping.projectilePrefab, mainCamera.transform);
+
+                    // Play Sound for Circle (at player's feet/camera position)
+                    if (mapping.skillSound != null)
+                    {
+                        AudioSource.PlayClipAtPoint(mapping.skillSound, mainCamera.transform.position, mapping.soundVolume / 100f);
+                    }
+
                     lastCircleTime = Time.time;
                 }
                 else
@@ -165,38 +224,6 @@ public class DetectGestures : MonoBehaviour
                 isAimingCircle = false;
                 aimingGestureIndex = -1;
             }
-        }
-    }
-
-    void ExecuteInstantSkill(GestureMapping mapping, XRHand hand)
-    {
-        if (mainCamera == null || magicSpawner == null) return;
-
-        switch (mapping.skillType)
-        {
-            case SkillType.ShootProjectile:
-                if (Time.time >= lastFireballTime + fireballCooldown)
-                {
-                    // 尝试获取食指指尖位置，如果获取不到就用手腕或者相机前方
-                    Vector3 spawnPos = mainCamera.transform.position + mainCamera.transform.forward * 0.5f;
-
-                    if (hand.GetJoint(XRHandJointID.IndexTip).TryGetPose(out Pose indexPose))
-                    {
-                        spawnPos = indexPose.position;
-                    }
-
-                    magicSpawner.ShootingBall(mapping.projectilePrefab, spawnPos, mainCamera.transform.rotation);
-                    lastFireballTime = Time.time;
-                }
-                break;
-
-            case SkillType.SpawnShield:
-                if (Time.time >= lastShieldTime + shieldCooldown)
-                {
-                    magicSpawner.SpawnShield(mapping.projectilePrefab, mainCamera.transform);
-                    lastShieldTime = Time.time;
-                }
-                break;
         }
     }
 }
