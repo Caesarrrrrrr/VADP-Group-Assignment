@@ -13,9 +13,9 @@ GameObject:
   - component: {fileID: 1053945605124036534}
   - component: {fileID: -4654471452784672198}
   - component: {fileID: -7670030171128416544}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Projectile_Fireball
-  m_TagString: Untagged
+  m_TagString: Fireball
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -53,7 +53,7 @@ Rigidbody:
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 192
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -74,7 +74,7 @@ SphereCollider:
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 192
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -97,7 +97,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a72429a8b40b1d4295ded2458fef245, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damageAmount: 20
+  damageAmount: 10
 --- !u!114 &-7670030171128416544
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -119,6 +119,22 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3268656275162901496}
     m_Modifications:
+    - target: {fileID: 290482682860154465, guid: ae1153d780f01fa4daa8e6b53c171784, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 3378136976419284729, guid: ae1153d780f01fa4daa8e6b53c171784, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 3872118036412323201, guid: ae1153d780f01fa4daa8e6b53c171784, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 5159905834301342982, guid: ae1153d780f01fa4daa8e6b53c171784, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 6148612279253390831, guid: ae1153d780f01fa4daa8e6b53c171784, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.15
@@ -178,6 +194,14 @@ PrefabInstance:
     - target: {fileID: 7000735478735714895, guid: ae1153d780f01fa4daa8e6b53c171784, type: 3}
       propertyPath: m_Name
       value: FireBall02
+      objectReference: {fileID: 0}
+    - target: {fileID: 7000735478735714895, guid: ae1153d780f01fa4daa8e6b53c171784, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 8143706055778600731, guid: ae1153d780f01fa4daa8e6b53c171784, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 6334785877483789835, guid: ae1153d780f01fa4daa8e6b53c171784, type: 3}
@@ -246,9 +270,21 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4636182052090632607, guid: 5879ee97f47d3144cab3b0ee50e9829d, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 4829451956311129229, guid: 5879ee97f47d3144cab3b0ee50e9829d, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 4837461443502220865, guid: 5879ee97f47d3144cab3b0ee50e9829d, type: 3}
       propertyPath: m_Name
       value: vfx_Flamethrower_01
+      objectReference: {fileID: 0}
+    - target: {fileID: 4837461443502220865, guid: 5879ee97f47d3144cab3b0ee50e9829d, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

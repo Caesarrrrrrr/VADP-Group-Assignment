@@ -3,7 +3,7 @@ using UnityEngine;
 public class PrefabTriggerUI : MonoBehaviour
 {
     [Tooltip("Type the EXACT name of the UI object in the scene you want to trigger.")]
-    public string targetUIName = "Gesture_Fireball_UI";
+    public string targetUIName = "Gesture_ThunderClap_UI";
 
     void Start()
     {

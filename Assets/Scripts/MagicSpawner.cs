@@ -79,7 +79,7 @@ public class MagicSpawner : MonoBehaviour
         Quaternion uprightRotation = Quaternion.Euler(0, cameraTransform.eulerAngles.y, 0);
 
         GameObject shield = Instantiate(prefabToSpawn, spawnPos, uprightRotation);
-        Destroy(shield, ballLifeTime);
+        Destroy(shield, 10f);
     }
 
     // 3. Update Aiming Preview (Called every frame while aiming)

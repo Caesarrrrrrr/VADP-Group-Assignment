@@ -28,6 +28,7 @@ TagManager:
   - QDSUIDestructiveButton
   - QDSUIToggleCheckboxRadio
   - QDSUITextInputField
+  - Fireball
   layers:
   - Default
   - TransparentFX
@@ -35,6 +36,8 @@ TagManager:
   - Overlay UI
   - Water
   - UI
+  - Magic
+  - Player
   - 
   - 
   - 
@@ -58,9 +61,7 @@ TagManager:
   - 
   - 
   - 
-  - 
-  - 
-  - 
+  - OVROverlayCanvas Rendering
   m_SortingLayers:
   - name: Default
     uniqueID: 0
