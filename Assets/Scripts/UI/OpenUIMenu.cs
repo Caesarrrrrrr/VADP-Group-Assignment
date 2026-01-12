@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.XR.Hands;
 using TMPro;
+using System.Collections;
 
 public class OpenUIMenu : MonoBehaviour
 {
@@ -31,7 +32,7 @@ public class OpenUIMenu : MonoBehaviour
             menuCanvas.SetActive(true);
 
             // 2. Position it immediately in front of the camera
-            PositionMenu();
+            StartCoroutine(DelayedPositionMenu());
         }
     }
 
@@ -86,6 +87,13 @@ public class OpenUIMenu : MonoBehaviour
         {
             PositionMenu();
         }
+    }
+
+    private IEnumerator DelayedPositionMenu()
+    {
+        // Wait for end of frame to ensure all transforms are updated
+        yield return new WaitForSeconds(1f);
+        PositionMenu();
     }
 
     // New helper function to handle positioning

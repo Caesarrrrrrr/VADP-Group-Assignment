@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement; 
 
 public class UIManager : MonoBehaviour
 {
@@ -99,5 +100,17 @@ public class UIManager : MonoBehaviour
         {
             sidePanel.SetActive(false);
         }
+    }
+
+    public void LoadSceneByIndex(int sceneIndex)
+    {
+        Debug.Log($"Loading Scene Index: {sceneIndex}");
+        SceneManager.LoadScene(sceneIndex);
+    }
+
+    public void QuitApplication()
+    {
+        Debug.Log("Quitting Application...");
+        Application.Quit();
     }
 }
