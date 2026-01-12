@@ -4948,6 +4948,7 @@ GameObject:
   - component: {fileID: 8101690516169784110}
   - component: {fileID: 1223776277592002108}
   - component: {fileID: 7018433807821291861}
+  - component: {fileID: 1960789855827771675}
   m_Layer: 0
   m_Name: WaterSpellMagic
   m_TagString: Untagged
@@ -5018,6 +5019,19 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1960789855827771675
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4221935472049608889}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a72429a8b40b1d4295ded2458fef245, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damageAmount: 30
 --- !u!1 &7292381624587629243
 GameObject:
   m_ObjectHideFlags: 0

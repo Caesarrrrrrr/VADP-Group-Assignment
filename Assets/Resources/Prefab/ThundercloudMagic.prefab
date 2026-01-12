@@ -12,18 +12,42 @@ PrefabInstance:
       propertyPath: m_Name
       value: ThundercloudMagic
       objectReference: {fileID: 0}
+    - target: {fileID: 284847970742790660, guid: d19c960e2f0c14a7ca1ebd345700afdd, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 650780779034742890, guid: d19c960e2f0c14a7ca1ebd345700afdd, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 691398866841604610, guid: d19c960e2f0c14a7ca1ebd345700afdd, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 1783584595651112586, guid: d19c960e2f0c14a7ca1ebd345700afdd, type: 3}
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: -7545762965820161845, guid: 0be7ba82a50c7421e9e64ab3a69b0fef, type: 3}
+    - target: {fileID: 2604377478820264853, guid: d19c960e2f0c14a7ca1ebd345700afdd, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 3418033278117716271, guid: d19c960e2f0c14a7ca1ebd345700afdd, type: 3}
       propertyPath: m_LocalPosition.y
       value: 2.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 3811061765874934524, guid: d19c960e2f0c14a7ca1ebd345700afdd, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 5437413117019037899, guid: d19c960e2f0c14a7ca1ebd345700afdd, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: cc1e9e91d8b4549e983b9b438861b8ed, type: 2}
+    - target: {fileID: 5797661161551266078, guid: d19c960e2f0c14a7ca1ebd345700afdd, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 6574902201157147556, guid: d19c960e2f0c14a7ca1ebd345700afdd, type: 3}
       propertyPath: m_LocalScale.x
       value: 1.1
@@ -42,15 +66,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8140402353456232004, guid: d19c960e2f0c14a7ca1ebd345700afdd, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.4
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8140402353456232004, guid: d19c960e2f0c14a7ca1ebd345700afdd, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.4
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8140402353456232004, guid: d19c960e2f0c14a7ca1ebd345700afdd, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.4
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8140402353456232004, guid: d19c960e2f0c14a7ca1ebd345700afdd, type: 3}
       propertyPath: m_LocalPosition.x
@@ -102,19 +126,49 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 284847970742790660, guid: d19c960e2f0c14a7ca1ebd345700afdd, type: 3}
       insertIndex: -1
+      addedObject: {fileID: -5136962234412288400}
+    - targetCorrespondingSourceObject: {fileID: 284847970742790660, guid: d19c960e2f0c14a7ca1ebd345700afdd, type: 3}
+      insertIndex: -1
       addedObject: {fileID: 434153114632918812}
     - targetCorrespondingSourceObject: {fileID: 284847970742790660, guid: d19c960e2f0c14a7ca1ebd345700afdd, type: 3}
       insertIndex: -1
-      addedObject: {fileID: -6043498364916926435}
+      addedObject: {fileID: 3425958157246239568}
     - targetCorrespondingSourceObject: {fileID: 284847970742790660, guid: d19c960e2f0c14a7ca1ebd345700afdd, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 3129596678722189332}
+      addedObject: {fileID: -5287548540365306130}
   m_SourcePrefab: {fileID: 100100000, guid: d19c960e2f0c14a7ca1ebd345700afdd, type: 3}
 --- !u!1 &2788573331118337571 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 284847970742790660, guid: d19c960e2f0c14a7ca1ebd345700afdd, type: 3}
   m_PrefabInstance: {fileID: 2684421440432948263}
   m_PrefabAsset: {fileID: 0}
+--- !u!54 &-5136962234412288400
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2788573331118337571}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 192
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 126
+  m_CollisionDetection: 0
 --- !u!135 &434153114632918812
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -125,7 +179,7 @@ SphereCollider:
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 192
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -134,9 +188,9 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 0.5
+  m_Radius: 0.8491546
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &-6043498364916926435
+--- !u!114 &3425958157246239568
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -145,17 +199,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 2788573331118337571}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -1552182283, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Script: {fileID: 11500000, guid: 3a72429a8b40b1d4295ded2458fef245, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SortKey: 3512894222
-  ObjectInterest: 1
-  Flags: 262145
-  NestedObjects: []
-  NetworkedBehaviours:
-  - {fileID: 3129596678722189332}
-  ForceRemoteRenderTimeframe: 0
---- !u!114 &3129596678722189332
+  damageAmount: 50
+--- !u!114 &-5287548540365306130
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -164,11 +212,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2788573331118337571}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 158639473, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Script: {fileID: 11500000, guid: 2f8d5c1e915082542a730524d289beac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _stateAuthorityChangeErrorCorrectionDelta: 0
-  SyncScale: 0
-  SyncParent: 0
-  _autoAOIOverride: 1
-  DisableSharedModeInterpolation: 0
+  targetUIName: ThunderClap

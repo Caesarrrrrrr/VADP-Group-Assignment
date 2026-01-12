@@ -9,13 +9,13 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3268656275162901496}
+  - component: {fileID: 10513608701762695}
   - component: {fileID: 1053945605124036534}
-  - component: {fileID: -882987101764477007}
-  - component: {fileID: 7872185316676597424}
-  - component: {fileID: 2475114434550274814}
-  m_Layer: 0
+  - component: {fileID: -4654471452784672198}
+  - component: {fileID: -7670030171128416544}
+  m_Layer: 6
   m_Name: Projectile_Fireball
-  m_TagString: Untagged
+  m_TagString: Fireball
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -37,6 +37,33 @@ Transform:
   - {fileID: 4716226689173561632}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!54 &10513608701762695
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3529620944495799580}
+  serializedVersion: 4
+  m_Mass: 0.5
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 192
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 2147483711
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!135 &1053945605124036534
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -47,18 +74,18 @@ SphereCollider:
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 192
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 2147483711
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 0.05
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &-882987101764477007
+  m_Radius: 0.16258436
+  m_Center: {x: 0.012965739, y: 0, z: 0.05345112}
+--- !u!114 &-4654471452784672198
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -67,18 +94,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 3529620944495799580}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -1552182283, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Script: {fileID: 11500000, guid: 3a72429a8b40b1d4295ded2458fef245, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SortKey: 1773790437
-  ObjectInterest: 1
-  Flags: 262145
-  NestedObjects: []
-  NetworkedBehaviours:
-  - {fileID: 7872185316676597424}
-  - {fileID: 2475114434550274814}
-  ForceRemoteRenderTimeframe: 0
---- !u!114 &7872185316676597424
+  damageAmount: 10
+--- !u!114 &-7670030171128416544
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -87,30 +107,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 3529620944495799580}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 158639473, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Script: {fileID: 11500000, guid: 2f8d5c1e915082542a730524d289beac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _stateAuthorityChangeErrorCorrectionDelta: 0
-  SyncScale: 0
-  SyncParent: 0
-  _autoAOIOverride: 1
-  DisableSharedModeInterpolation: 0
---- !u!114 &2475114434550274814
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3529620944495799580}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a318d1e52cf52f14b9911f58c959ba09, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  speed: 10
-  lifeTime: 4
-  damage: 10
-  impactParticle: {fileID: 0}
+  targetUIName: FireBall
 --- !u!1001 &7180988700169549944
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -119,6 +119,22 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3268656275162901496}
     m_Modifications:
+    - target: {fileID: 290482682860154465, guid: ae1153d780f01fa4daa8e6b53c171784, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 3378136976419284729, guid: ae1153d780f01fa4daa8e6b53c171784, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 3872118036412323201, guid: ae1153d780f01fa4daa8e6b53c171784, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 5159905834301342982, guid: ae1153d780f01fa4daa8e6b53c171784, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 6148612279253390831, guid: ae1153d780f01fa4daa8e6b53c171784, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.15
@@ -178,6 +194,14 @@ PrefabInstance:
     - target: {fileID: 7000735478735714895, guid: ae1153d780f01fa4daa8e6b53c171784, type: 3}
       propertyPath: m_Name
       value: FireBall02
+      objectReference: {fileID: 0}
+    - target: {fileID: 7000735478735714895, guid: ae1153d780f01fa4daa8e6b53c171784, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 8143706055778600731, guid: ae1153d780f01fa4daa8e6b53c171784, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 6334785877483789835, guid: ae1153d780f01fa4daa8e6b53c171784, type: 3}
@@ -246,9 +270,21 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4636182052090632607, guid: 5879ee97f47d3144cab3b0ee50e9829d, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 4829451956311129229, guid: 5879ee97f47d3144cab3b0ee50e9829d, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 4837461443502220865, guid: 5879ee97f47d3144cab3b0ee50e9829d, type: 3}
       propertyPath: m_Name
       value: vfx_Flamethrower_01
+      objectReference: {fileID: 0}
+    - target: {fileID: 4837461443502220865, guid: 5879ee97f47d3144cab3b0ee50e9829d, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

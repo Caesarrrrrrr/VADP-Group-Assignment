@@ -16,7 +16,15 @@ public class BallDamage : MonoBehaviour
             enemyHealth.TakeDamage(damageAmount);
         }
 
-        // 3. Destroy the ball immediately after hitting something solid
-        Destroy(gameObject);
+        // 3. Check if THIS object is tagged "Fireball" before destroying
+        if (gameObject.CompareTag("Fireball"))
+        {
+            Destroy(gameObject);
+        }
+        else
+        {
+            // Optional: Logic for what happens if it is NOT a fireball
+            // e.g., Debug.Log("Ball hit something but wasn't a fireball, so it stayed.");
+        }
     }
 }
