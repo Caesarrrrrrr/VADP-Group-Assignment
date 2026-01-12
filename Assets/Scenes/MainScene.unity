@@ -8354,7 +8354,7 @@ MonoBehaviour:
     handShape: {fileID: 11400000, guid: 1ea02999802462b468ed8cdcb93a2bbf, type: 2}
     projectilePrefab: {fileID: 3529620944495799580, guid: 03eae5a4663b77742992f85aa13d0318, type: 3}
     skillType: 0
-    requiresVoice: 0
+    requiresVoice: 1
     voiceKeyword: fireball
     skillSound: {fileID: 8300000, guid: cac29c4818ffabb4481c37c8cdb62b62, type: 3}
     soundVolume: 70
@@ -16885,7 +16885,7 @@ MonoBehaviour:
       m_PersistentCalls:
         m_Calls: []
   witRuntimeConfiguration:
-    witConfiguration: {fileID: 11400000, guid: a46ef1fd5f0381c459b72d60e39e9412, type: 2}
+    witConfiguration: {fileID: 11400000, guid: 00197d30ad3f119478cbfa40b6b185ff, type: 2}
     minKeepAliveVolume: 0.0005
     minKeepAliveTimeInSeconds: 2
     minTranscriptionKeepAliveTimeInSeconds: 1
