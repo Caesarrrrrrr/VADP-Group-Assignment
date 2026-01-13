@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class MoveTrainingDummyAndSpawnShield : MonoBehaviour
@@ -45,6 +46,17 @@ public class MoveTrainingDummyAndSpawnShield : MonoBehaviour
             activeShield = Instantiate(shieldPrefab, targetDummy.transform);
             activeShield.transform.localPosition = new Vector3(0, 0f, 0f);
             activeShield.transform.localRotation = Quaternion.identity;
+            StartCoroutine(Destroy());
+        }
+    }
+
+    private IEnumerator Destroy()
+    {
+        yield return new WaitForSeconds(9f);
+        // Clean up the shield if the dummy is destroyed
+        if (activeShield != null)
+        {
+            Destroy(activeShield);
         }
     }
 
