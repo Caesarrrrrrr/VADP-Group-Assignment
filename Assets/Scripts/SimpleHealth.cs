@@ -9,7 +9,7 @@ public class SimpleHealth : MonoBehaviour
 
     [Header("References")]
     public HealthBarUI healthBar;
-    private Animator animator;
+    [SerializeField] private Animator animator;
 
     [Header("Dummy Settings")]
     [Tooltip("How long to stay 'dead' before reviving")]
@@ -45,8 +45,8 @@ public class SimpleHealth : MonoBehaviour
             if (animator != null)
             {
                 // 1. Play Death Animation
-                animator.SetTrigger("isDie");
-                
+                animator.SetBool("isDie", true);
+                StartCoroutine(DestroyObject());
                 // 2. Start timer to bring it back to life
                 StartCoroutine(ReviveRoutine());
             }
@@ -55,6 +55,13 @@ public class SimpleHealth : MonoBehaviour
         {
             Destroy(gameObject);
         }
+    }
+
+    private IEnumerator DestroyObject()
+    {
+        // Wait for the animation to finish or for the specified delay
+        yield return new WaitForSeconds(1f);
+        Destroy(gameObject);
     }
 
     private IEnumerator ReviveRoutine()
