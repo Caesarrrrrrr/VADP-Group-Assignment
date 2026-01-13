@@ -14,9 +14,6 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/NetworkScene.unity
     guid: 245c3946ba6116b4c9956c0fdc8469ad
-  - enabled: 0
-    path: Assets/Scenes/Multiplayer.unity
-    guid: cac843f40e88be3409cebf967431eb58
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
     com.unity.xr.arfoundation.simulation_settings: {fileID: 11400000, guid: 22e77ba776bebe64b80683ce28bb1b6c, type: 2}

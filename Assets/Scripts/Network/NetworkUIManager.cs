@@ -1,7 +1,8 @@
 using UnityEngine;
 using TMPro;
 using Fusion;
-using System.Linq; // Added for better search
+using System.Linq;
+using UnityEngine.SceneManagement;
 
 public class NetworkUIManager : MonoBehaviour
 {
@@ -66,4 +67,11 @@ public class NetworkUIManager : MonoBehaviour
             statusText.color = color;
         }
     }
+
+    public void LoadSceneByIndex(int sceneIndex)
+    {
+        Debug.Log($"Loading Scene Index: {sceneIndex}");
+        SceneManager.LoadScene(sceneIndex);
+    }
+
 }

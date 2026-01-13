@@ -470,7 +470,6 @@ GameObject:
   - component: {fileID: 79243479}
   - component: {fileID: 79243478}
   - component: {fileID: 79243477}
-  - component: {fileID: 79243481}
   m_Layer: 3
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -679,14 +678,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!33 &79243481
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 79243474}
-  m_Mesh: {fileID: 0}
 --- !u!1 &91481523
 GameObject:
   m_ObjectHideFlags: 0
@@ -1723,7 +1714,6 @@ GameObject:
   - component: {fileID: 163958289}
   - component: {fileID: 163958288}
   - component: {fileID: 163958287}
-  - component: {fileID: 163958291}
   m_Layer: 3
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -1930,14 +1920,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!33 &163958291
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 163958285}
-  m_Mesh: {fileID: 0}
 --- !u!1 &175811676
 GameObject:
   m_ObjectHideFlags: 0
@@ -2773,7 +2755,6 @@ GameObject:
   - component: {fileID: 245035175}
   - component: {fileID: 245035174}
   - component: {fileID: 245035173}
-  - component: {fileID: 245035177}
   m_Layer: 3
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -2980,14 +2961,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!33 &245035177
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 245035171}
-  m_Mesh: {fileID: 0}
 --- !u!1 &246741849
 GameObject:
   m_ObjectHideFlags: 0
@@ -8466,31 +8439,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <SceneLoadedEvent>k__BackingField:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1202674665}
-        m_TargetAssemblyTypeName: Meta.XR.MRUtilityKit.EffectMesh, meta.xr.mrutilitykit
-        m_MethodName: CreateMesh
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 520521566}
-        m_TargetAssemblyTypeName: Meta.XR.MRUtilityKit.EffectMesh, meta.xr.mrutilitykit
-        m_MethodName: CreateMesh
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   <RoomCreatedEvent>k__BackingField:
     m_PersistentCalls:
       m_Calls: []
@@ -10015,7 +9964,6 @@ GameObject:
   - component: {fileID: 1192530997}
   - component: {fileID: 1192530996}
   - component: {fileID: 1192530995}
-  - component: {fileID: 1192530999}
   m_Layer: 3
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -10224,14 +10172,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!33 &1192530999
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1192530993}
-  m_Mesh: {fileID: 0}
 --- !u!1 &1192861918
 GameObject:
   m_ObjectHideFlags: 0
@@ -15521,7 +15461,6 @@ GameObject:
   - component: {fileID: 1839607427}
   - component: {fileID: 1839607426}
   - component: {fileID: 1839607425}
-  - component: {fileID: 1839607429}
   m_Layer: 3
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -15728,14 +15667,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!33 &1839607429
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1839607423}
-  m_Mesh: {fileID: 0}
 --- !u!1 &1843145692
 GameObject:
   m_ObjectHideFlags: 0
@@ -24597,7 +24528,6 @@ GameObject:
   - component: {fileID: 2116256492}
   - component: {fileID: 2116256491}
   - component: {fileID: 2116256490}
-  - component: {fileID: 2116256494}
   m_Layer: 3
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -24806,14 +24736,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!33 &2116256494
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2116256488}
-  m_Mesh: {fileID: 0}
 --- !u!1 &2116866233
 GameObject:
   m_ObjectHideFlags: 0
