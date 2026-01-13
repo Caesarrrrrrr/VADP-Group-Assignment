@@ -50,28 +50,38 @@ public class MagicEntity : NetworkBehaviour
 
         if (Runner.GetPhysicsScene().Raycast(transform.position, dir, out var hit, moveDist, hitMask))
         {
-            // 1. Check for Player Hit
+            // 🔍 DEBUG HIT INFO
+            // Debug.Log($"[Magic] Hit Object: {hit.collider.name} | Layer: {LayerMask.LayerToName(hit.collider.gameObject.layer)}");
+
             if (hit.collider.TryGetComponent<NetworkHealth>(out var targetHealth))
             {
                 bool isDummy = hit.collider.gameObject.layer == LayerMask.NameToLayer("Dummy");
+                
+                // Get IDs for debugging
+                var myOwner = Object.InputAuthority;
+                var targetOwner = targetHealth.Object.InputAuthority;
 
-                // SAFETY: If I hit MYSELF, keep moving (Don't stuck, Don't despawn)
-                if (!isDummy && targetHealth.Object.InputAuthority == Object.InputAuthority) {
+                // 🛑 SAFETY CHECK
+                if (!isDummy && targetOwner == myOwner) 
+                {
+                    // Debug.Log($"[Magic] 🛡️ Friendly Fire Blocked! Bullet Owner: {myOwner} vs Target Owner: {targetOwner}");
+                    
+                    // Keep moving (Anti-Freeze)
                     transform.position += dir * moveDist; 
                     return; 
                 }
-                
-                // If it's an ENEMY or Dummy, take damage
+
+                Debug.Log($"[Magic] ⚔️ DAMAGING PLAYER! Owner {myOwner} hit {targetOwner}");
                 targetHealth.TakeDamage(damageAmount);
             }
-            // 2. Check for Shield Hit
-            else if (hit.collider.TryGetComponent<MagicEntity>(out var shield)) {
+            else if (hit.collider.TryGetComponent<MagicEntity>(out var shield)) 
+            {
                 shield.TakeDamage(damageAmount);
             }
 
-            // 3. HIT WALL / GROUND / ENEMY -> DESPAWN NOW
-            // This ensures it never gets "stuck" on a wall or visual mesh
-            if (impactParticle != null && Runner.IsForward) {
+            // Visuals & Despawn
+            if (impactParticle != null && Runner.IsForward) 
+            {
                 Quaternion rot = (hit.normal != Vector3.zero) ? Quaternion.LookRotation(hit.normal) : transform.rotation;
                 GameObject vfx = Instantiate(impactParticle, hit.point, rot);
                 Destroy(vfx, 2.0f);
@@ -81,7 +91,6 @@ public class MagicEntity : NetworkBehaviour
         }
         else 
         { 
-            // Nothing hit, move forward
             transform.position += dir * moveDist; 
         }
     }

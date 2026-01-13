@@ -1,11 +1,11 @@
 using UnityEngine;
 using TMPro;
 using Fusion;
-using UnityEngine.SceneManagement;
+using System.Linq; // Added for better search
 
 public class NetworkUIManager : MonoBehaviour
 {
-[Header("UI Reference")]
+    [Header("UI Reference")]
     public TextMeshProUGUI statusText;
 
     [Header("Settings")]
@@ -19,16 +19,18 @@ public class NetworkUIManager : MonoBehaviour
     {
         if (statusText == null) return;
 
-        // 1. Try to find the NetworkRunner if we don't have it
-        if (_runner == null)
+        // 1. Refresh Runner Reference if null or dead
+        if (_runner == null || !_runner.IsRunning)
         {
-            _runner = FindFirstObjectByType<NetworkRunner>();
+            // Find ANY runner that is actually running (Ignore zombies)
+            var allRunners = FindObjectsByType<NetworkRunner>(FindObjectsSortMode.None);
+            _runner = allRunners.FirstOrDefault(r => r.IsRunning);
         }
 
         // 2. Logic: Determine Status
         if (_runner == null)
         {
-            UpdateDisplay("Status: Offline (No Runner)", offlineColor);
+            UpdateDisplay("Status: Waiting for Runner...", offlineColor);
         }
         else if (!_runner.IsRunning)
         {
@@ -36,10 +38,16 @@ public class NetworkUIManager : MonoBehaviour
         }
         else if (_runner.IsRunning)
         {
-            // We are connected! Gather details.
             string mode = _runner.GameMode == GameMode.Host ? "HOST" : "CLIENT";
-            string roomName = _runner.SessionInfo.IsValid ? _runner.SessionInfo.Name : "Joining...";
-            int playerCount = _runner.SessionInfo.IsValid ? _runner.SessionInfo.PlayerCount : 0;
+            
+            // Check if SessionInfo is ready (sometimes null briefly)
+            string roomName = (_runner.SessionInfo != null && _runner.SessionInfo.IsValid) 
+                              ? _runner.SessionInfo.Name 
+                              : "Joining...";
+                              
+            int playerCount = (_runner.SessionInfo != null && _runner.SessionInfo.IsValid) 
+                              ? _runner.SessionInfo.PlayerCount 
+                              : 0;
 
             string message = $"Status: ONLINE ({mode})\n" +
                              $"Room: {roomName}\n" +
@@ -49,16 +57,13 @@ public class NetworkUIManager : MonoBehaviour
         }
     }
 
-    // Helper function to change text and color
     void UpdateDisplay(string text, Color color)
     {
-        statusText.text = text;
-        statusText.color = color;
-    }
-
-    public void LoadSceneByIndex(int sceneIndex)
-    {
-        Debug.Log($"Loading Scene Index: {sceneIndex}");
-        SceneManager.LoadScene(sceneIndex);
+        // Only update if text actually changed to save performance
+        if (statusText.text != text)
+        {
+            statusText.text = text;
+            statusText.color = color;
+        }
     }
 }
