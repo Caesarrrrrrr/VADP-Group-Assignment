@@ -1,6 +1,7 @@
 using UnityEngine;
 using TMPro;
 using Fusion;
+using UnityEngine.SceneManagement;
 
 public class NetworkUIManager : MonoBehaviour
 {
@@ -53,5 +54,11 @@ public class NetworkUIManager : MonoBehaviour
     {
         statusText.text = text;
         statusText.color = color;
+    }
+
+    public void LoadSceneByIndex(int sceneIndex)
+    {
+        Debug.Log($"Loading Scene Index: {sceneIndex}");
+        SceneManager.LoadScene(sceneIndex);
     }
 }
