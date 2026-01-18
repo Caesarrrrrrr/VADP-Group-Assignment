@@ -15,16 +15,23 @@ public class NetworkHealth : NetworkBehaviour
         UpdateUI();
     }
 
-    public void TakeDamage(float amount)
+    [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
+    public void RPC_TakeDamage(float amount)
     {
-        if (!HasStateAuthority) return;
         CurrentHealth -= amount;
-        if (CurrentHealth <= 0) {
+        
+        Debug.Log($"[Health] Took {amount} damage. Current: {CurrentHealth}");
+
+        if (CurrentHealth <= 0) 
+        {
             CurrentHealth = 0;
-            Debug.Log("💀 Died!");
-            // DO NOT DESTROY OBJECT HERE or Hands will break. 
-            // Just play animation or disable mesh.
+            Die();
         }
+    }
+
+    void Die()
+    {
+        Debug.Log("💀 Died!");
     }
 
     public override void Render()

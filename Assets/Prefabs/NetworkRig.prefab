@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1210603355592835402}
   - component: {fileID: 1798617806526053864}
   - component: {fileID: 7168767943860753090}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -99,7 +99,7 @@ GameObject:
   - component: {fileID: 7026286283787809828}
   - component: {fileID: 3839381489384179212}
   - component: {fileID: 1555311551519484703}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -214,7 +214,7 @@ GameObject:
   - component: {fileID: 1977322648515637960}
   - component: {fileID: 2648714040890426335}
   - component: {fileID: 7193255071633023072}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Fill
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -288,7 +288,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1667652654824229161}
   - component: {fileID: 4726391627478254989}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Slider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -507,7 +507,7 @@ GameObject:
   - component: {fileID: 5576672172027404615}
   - component: {fileID: 2259905419135942401}
   - component: {fileID: 4185557580554091949}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -580,7 +580,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4509769941885651572}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Fill Area
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -618,6 +618,14 @@ PrefabInstance:
     - target: {fileID: 3452257749197852443, guid: 55f8a2e9d1483634f95bb3ae8b9df05e, type: 3}
       propertyPath: m_Name
       value: NetworkHandTrackingGesture
+      objectReference: {fileID: 0}
+    - target: {fileID: 3452257749197852443, guid: 55f8a2e9d1483634f95bb3ae8b9df05e, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 6092985348369454627, guid: 55f8a2e9d1483634f95bb3ae8b9df05e, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 7600273063997505766, guid: 55f8a2e9d1483634f95bb3ae8b9df05e, type: 3}
       propertyPath: m_LocalPosition.x

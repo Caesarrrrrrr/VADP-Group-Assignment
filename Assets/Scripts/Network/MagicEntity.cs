@@ -50,36 +50,29 @@ public class MagicEntity : NetworkBehaviour
 
         if (Runner.GetPhysicsScene().Raycast(transform.position, dir, out var hit, moveDist, hitMask))
         {
-            // 🔍 DEBUG HIT INFO
-            // Debug.Log($"[Magic] Hit Object: {hit.collider.name} | Layer: {LayerMask.LayerToName(hit.collider.gameObject.layer)}");
+            var targetHealth = hit.collider.GetComponentInParent<NetworkHealth>();
 
-            if (hit.collider.TryGetComponent<NetworkHealth>(out var targetHealth))
+            if (targetHealth != null)
             {
                 bool isDummy = hit.collider.gameObject.layer == LayerMask.NameToLayer("Dummy");
-                
-                // Get IDs for debugging
-                var myOwner = Object.InputAuthority;
-                var targetOwner = targetHealth.Object.InputAuthority;
 
-                // 🛑 SAFETY CHECK
-                if (!isDummy && targetOwner == myOwner) 
+                if (!isDummy && targetHealth.Object.InputAuthority == Object.InputAuthority) 
                 {
-                    // Debug.Log($"[Magic] 🛡️ Friendly Fire Blocked! Bullet Owner: {myOwner} vs Target Owner: {targetOwner}");
-                    
-                    // Keep moving (Anti-Freeze)
                     transform.position += dir * moveDist; 
                     return; 
                 }
 
-                Debug.Log($"[Magic] ⚔️ DAMAGING PLAYER! Owner {myOwner} hit {targetOwner}");
-                targetHealth.TakeDamage(damageAmount);
+                // --- HIT! ---
+                Debug.Log($"[Magic] ⚔️ HIT Player! Dealt {damageAmount} damage.");
+                
+                targetHealth.RPC_TakeDamage(damageAmount);
             }
-            else if (hit.collider.TryGetComponent<MagicEntity>(out var shield)) 
+            else if (hit.collider.GetComponentInParent<MagicEntity>() is MagicEntity shield) 
             {
                 shield.TakeDamage(damageAmount);
             }
 
-            // Visuals & Despawn
+            // Visuals
             if (impactParticle != null && Runner.IsForward) 
             {
                 Quaternion rot = (hit.normal != Vector3.zero) ? Quaternion.LookRotation(hit.normal) : transform.rotation;
@@ -104,8 +97,9 @@ public class MagicEntity : NetworkBehaviour
 
             foreach (var hit in hits) {
                 if (hit.GameObject == gameObject) continue; 
-                if (hit.GameObject.TryGetComponent<MagicEntity>(out var entity)) entity.TakeDamage(damageAmount);
-                else if (hit.GameObject.TryGetComponent<NetworkHealth>(out var hp)) hp.TakeDamage(damageAmount);
+                
+                var targetHealth = hit.GameObject.GetComponentInParent<NetworkHealth>();
+                if (targetHealth) targetHealth.RPC_TakeDamage(damageAmount);
             }
         }
     }
